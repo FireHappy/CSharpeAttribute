@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Attribute
 {
@@ -25,18 +21,19 @@ namespace Attribute
             //取得自定义特性
             IEnumerable<System.Attribute> attributes= typeof(T).GetCustomAttributes();
             var enumerable = attributes as System.Attribute[] ?? attributes.ToArray();
-            //while (enumerable.GetEnumerator().MoveNext())
-            //{
-            //    Console.WriteLine(enumerable.GetEnumerator().MoveNext());  
-            //    Console.WriteLine(enumerable.GetEnumerator().Current);
-            //}
-            //遍历特性
-            foreach (var attribute in enumerable)
+            IEnumerator enumerator = attributes.GetEnumerator();//获得枚举器
+            //枚举的参考信息 https://www.cnblogs.com/2star/p/5538567.html
+            while (enumerator.MoveNext())
+            {
+                Console.WriteLine(enumerator.Current);
+            }
+            //使用foreach枚举
+            foreach (var attribute in attributes)
             {
                 Console.WriteLine(attribute);
                 if (attribute.GetType() == typeof(HelpAttribute))
                 {
-                    HelpAttribute help = (HelpAttribute) attribute;
+                    HelpAttribute help = (HelpAttribute)attribute;
                     Console.WriteLine("help.Description:" + help.Description);
                 }
             }
